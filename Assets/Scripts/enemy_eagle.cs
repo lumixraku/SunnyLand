@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class enemy_eagle : Enemy
 {
 
@@ -39,10 +40,9 @@ public class enemy_eagle : Enemy
         if (direction == -1 && currentY < limitDown)
         {
             direction = 1;
-
         }
-        Debug.LogFormat("speed  {0}", speed);
+        //Debug.LogFormat("speed  {0}", speed);
         //Debug.LogFormat("eagle pos {0}  {1}", transform.position.y, speed * direction);
-        rb.velocity = new Vector2(rb.velocity.x, speed * direction );
+        rb.velocity = new Vector2(rb.velocity.x, speed * direction  );
     }
 }

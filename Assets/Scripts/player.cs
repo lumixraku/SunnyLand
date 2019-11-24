@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
 
+    public Collider2D coll;
+    public LayerMask ground;  //指的layer  而不是 sort layer
+    public Text textCherryCount;
+    public AudioSource jumpAudio;
+    //public ScenceManager
 
     public float speed;
     public float jumpForce;
-    public Collider2D coll;
-    public LayerMask ground;
-    public Text textCherryCount;
-    public int cherryCount;
 
+
+
+
+    public int cherryCount;
     private bool justInjure;
 
     // Start is called before the first frame update
@@ -23,7 +29,6 @@ public class player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
 
     }
 
@@ -37,20 +42,25 @@ public class player : MonoBehaviour
 
     void movement()
     {
-        float f = Input.GetAxis("Horizontal");
+        float horizonInputValue = Input.GetAxis("Horizontal");
+        float verticalInputValue = Input.GetAxis("Vertical");
         float faceDirect = Input.GetAxisRaw("Horizontal"); // only -1 and 1 and 0
 
         if (justInjure)
         {
             return;
         }
-
-        if (f != 0.0f)
+        if (horizonInputValue != 0.0f)
         {
-
-            rb.velocity = new Vector2(f * speed * Time.deltaTime, rb.velocity.y);
+            rb.velocity = new Vector2(horizonInputValue * speed * Time.fixedDeltaTime, rb.velocity.y);
             animator.SetFloat("running", Mathf.Abs(faceDirect));
         }
+        if (verticalInputValue != 0.0f)
+        {
+
+        }
+
+
 
         if (faceDirect != 0)
         {
@@ -59,8 +69,9 @@ public class player : MonoBehaviour
 
         if (Input.GetButton("Jump") && coll.IsTouchingLayers(ground))
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.deltaTime);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
             animator.SetBool("jumping", true);
+            jumpAudio.Play();
         }
     }
 
@@ -94,7 +105,8 @@ public class player : MonoBehaviour
 
         if (System.Math.Abs(rb.velocity.y) <= Mathf.Epsilon)
         {
-            //print("System.Math.Abs(rb.velocity.y) < Mathf.Epsilon" + coll.IsTouchingLayers(ground).ToString());
+            print("System.Math.Abs(rb.velocity.y) < Mathf.Epsilon" + coll.IsTouchingLayers(ground).ToString());
+
             if (coll.IsTouchingLayers(ground))
             {
                 //print("IsTouchingLayers");
@@ -136,11 +148,26 @@ public class player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Collection")
+        if (collision.CompareTag("Collection"))
         {
-            Destroy(collision.gameObject);
+            //Destroy(collision.gameObject);
+            this.collectionFeedback(collision);
             cherryCount = cherryCount + 1;
             textCherryCount.text = "" + cherryCount;
+        }
+
+        // 掉到世界范围外
+        if (collision.CompareTag("DeadLine"))
+        {
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // 声音全部关闭
+            AudioSource[] audios = GetComponents<AudioSource>();
+            for (int i = audios.Length - 1; i >= 0; i--)
+            {
+                audios[i].enabled = false;
+            }
+            Invoke("Restart", 1f);
+
         }
     }
 
@@ -156,7 +183,7 @@ public class player : MonoBehaviour
                 //Destroy(collision.gameObject);
                 // 杀死敌人还有反弹跳跃的效果
                 float shrinkJump = 0.5f;
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce * shrinkJump * Time.deltaTime);
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce * shrinkJump * Time.fixedDeltaTime);
                 animator.SetBool("jumping", true);
             }
             else
@@ -167,15 +194,30 @@ public class player : MonoBehaviour
                 //这里都是玩家受到伤害  //受到伤害会往行进的反反向弹开
                 if (transform.position.x < collision.gameObject.transform.position.x)
                 {
-                    rb.velocity = new Vector2(-1f * speed * Time.deltaTime, rb.velocity.y);
+                    rb.velocity = new Vector2(-1f * speed * Time.fixedDeltaTime, rb.velocity.y);
                 }
                 if (transform.position.x > collision.gameObject.transform.position.x)
                 {
-                    rb.velocity = new Vector2(speed * Time.deltaTime, rb.velocity.y);
+                    rb.velocity = new Vector2(speed * Time.fixedDeltaTime, rb.velocity.y);
                 }
 
             }
         }
+    }
+
+    void collectionFeedback(Collider2D collision)
+    {
+        Collection collect = collision.gameObject.GetComponent<Collection>();
+        collect.PlayFeedback();
+    }
+
+
+    //重制当前场景
+    void Restart()
+    {
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
     }
 
 }
