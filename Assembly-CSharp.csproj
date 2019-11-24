@@ -63,7 +63,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\enemy_eagle.cs" />
+    <Compile Include="Assets\Scripts\enemy_frog.cs" />
     <Compile Include="Assets\Scripts\player.cs" />
+    <Compile Include="Assets\Zero Rare\Retro Sound Effects\Demo\Demo.cs" />
+    <None Include="Assets\CasualGameBGM05\ReadMe.txt" />
     <Reference Include="Cinemachine">
       <HintPath>/Users/lilin/sunny land/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
     </Reference>

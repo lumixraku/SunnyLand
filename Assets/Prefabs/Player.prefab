@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1320220288908215683}
   - component: {fileID: 1320220288908215685}
   - component: {fileID: 1320220288908215684}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -478937577
-  m_SortingLayer: 2
+  m_SortingLayerID: -1154778499
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -101,7 +101,7 @@ Rigidbody2D:
   m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -114,7 +114,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1320220288908215738}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e154cce66e04f48d2b0bddb4d6b8b01e, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -162,12 +162,13 @@ MonoBehaviour:
   rb: {fileID: 1320220288908215736}
   animator: {fileID: 1320220288908215684}
   speed: 400
-  jumpForce: 400
+  jumpForce: 300
   coll: {fileID: 1320220288908215683}
   ground:
     serializedVersion: 2
-    m_Bits: 256
-  CherryCount: 0
+    m_Bits: 8192
+  textCherryCount: {fileID: 0}
+  cherryCount: 0
 --- !u!95 &1320220288908215684
 Animator:
   serializedVersion: 3

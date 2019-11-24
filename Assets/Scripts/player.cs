@@ -66,7 +66,7 @@ public class player : MonoBehaviour
 
     void SwitchAnimation()
     {
-        if (rb.velocity.y < -Mathf.Epsilon)
+        if (rb.velocity.y < Mathf.Epsilon)
         {
             //print("falling" + animator.GetBool("falling") + " ::: " + rb.velocity.y);
             animator.SetBool("falling", true);
@@ -148,9 +148,12 @@ public class player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
             if (animator.GetBool("falling"))
             {
-                Destroy(collision.gameObject);
+                enemy.JumpOn();
+                //Destroy(collision.gameObject);
                 // 杀死敌人还有反弹跳跃的效果
                 float shrinkJump = 0.5f;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * shrinkJump * Time.deltaTime);
